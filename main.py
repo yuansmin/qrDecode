@@ -4,7 +4,7 @@
 
 import json
 import qrtools
-import urlparse
+# import urlparse
 import requests
 
 from flask import Flask, request
@@ -19,9 +19,9 @@ def decode_img():
         url = request.args.get('url', None)
         file_name = 'images/qr'
         if url:
-            domain = urlparse.urlsplit(url).netloc
-            headers = {'Referer': domain}
-            resp = requests.get(url, headers=headers)
+            # domain = urlparse.urlsplit(url).netloc
+            # headers = {'Referer': domain}
+            resp = requests.get(url) #, headers=headers)
             with open(file_name, 'w') as f:
                 f.write(resp.content)
         else:
