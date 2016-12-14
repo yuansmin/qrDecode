@@ -6,6 +6,7 @@ import json
 import qrtools
 # import urlparse
 import requests
+from StringIO import StringIO
 
 from flask import Flask, request
 
@@ -17,18 +18,19 @@ def decode_img():
     try:
         result = {'status': 0, 'is_qr': False, 'data': None, 'msg': 'success'}
         url = request.args.get('url', None)
-        file_name = 'images/qr'
+        # file_name = 'images/qr'
         if url:
             # domain = urlparse.urlsplit(url).netloc
             # headers = {'Referer': domain}
             resp = requests.get(url) #, headers=headers)
-            with open(file_name, 'w') as f:
-                f.write(resp.content)
+            f = StringIO(resp.content)
+            # with open(file_name, 'w') as f:
+            #     f.write(resp.content)
         else:
-            file = request.files['file']
-            file.save('images/qr')
+            f = request.files['file']
+            # file.save('images/qr')
         qr = qrtools.QR()
-        result['is_qr'] = qr.decode(file_name)
+        result['is_qr'] = qr.decode(f)
         if result['is_qr']:
             result['data'] = qr.data
     except Exception, e:
