@@ -1,0 +1,2 @@
+qrtools
+requests >= 2.9.1
