@@ -12,24 +12,20 @@ from flask import Flask, request
 
 app = Flask('decoder')
 
+qr = qrtools.QR()
 
 @app.route('/decode', methods=['GET'])
 def decode_img():
     try:
         result = {'status': 0, 'is_qr': False, 'data': None, 'msg': 'success'}
         url = request.args.get('url', None)
-        # file_name = 'images/qr'
         if url:
             # domain = urlparse.urlsplit(url).netloc
             # headers = {'Referer': domain}
             resp = requests.get(url) #, headers=headers)
             f = StringIO(resp.content)
-            # with open(file_name, 'w') as f:
-            #     f.write(resp.content)
         else:
             f = request.files['file']
-            # file.save('images/qr')
-        qr = qrtools.QR()
         result['is_qr'] = qr.decode(f)
         if result['is_qr']:
             result['data'] = qr.data
